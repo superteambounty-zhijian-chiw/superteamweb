@@ -23,7 +23,14 @@ export default async function LandingPage() {
       <HeroSection data={landing} />
       {/* Stacks above fixed hero; no bg here so hero stays visible during scroll transition */}
       <div className="relative z-10">
-        <WelcomeSection />
+        {/* Single continuous background for Welcome + Partners */}
+        <div
+          className="relative bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/assets/kl_mosque.jpg')" }}
+        >
+          <WelcomeSection />
+          <PartnersSection partners={partners} />
+        </div>
         <MissionSection pillars={landing?.missionPillars ?? null} />
         <StatsSection stats={landing?.stats ?? null} />
 
@@ -32,7 +39,7 @@ export default async function LandingPage() {
           upcomingEvents={upcomingEvents}
           viewAllEventsUrl={landing?.viewAllEventsUrl ?? null}
         />
-        <PartnersSection partners={partners} />
+        
         <MemberSection members={members} />
         <CommunitySection />
         {/* Single continuous background for FAQ, CTA, and Footer */}

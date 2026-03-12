@@ -16,7 +16,7 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
 
   return (
     <section
-      className="border-t border-border/40 bg-black px-4 py-8 sm:px-6 sm:py-10"
+      className="border-t border-border/40 px-4 py-8 sm:px-6 sm:py-10"
       aria-labelledby="partners-heading"
     >
       <div className="mx-auto max-w-6xl">

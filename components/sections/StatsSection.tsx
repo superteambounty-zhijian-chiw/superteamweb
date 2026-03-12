@@ -48,7 +48,7 @@ export function StatsSection({ stats }: StatsSectionProps) {
   return (
     <section
       ref={sectionRef}
-      className="border-t border-border/40 bg-background px-4 py-16 sm:px-6 sm:py-20"
+      className="border-t border-border/40 bg-black px-4 py-16 sm:px-6 sm:py-20"
       aria-labelledby="stats-heading"
     >
       <div className="mx-auto max-w-6xl">

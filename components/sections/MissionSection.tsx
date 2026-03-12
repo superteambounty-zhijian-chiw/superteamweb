@@ -142,7 +142,7 @@ function WhoWeAreContent({
               description={item.description ?? ''}
               background={item.background}
               className={cn(
-                'min-h-[10.5rem] border border-white/15 bg-white/5 text-white dark:border-white/20 dark:bg-white/10 md:min-h-[12rem] [&_h3]:text-white [&_p]:text-white/80'
+                'min-h-[10.5rem] border border-white/15 bg-white/5 text-white dark:border-white/20 dark:bg-white/10 md:min-h-[18rem] [&_h3]:text-white [&_p]:text-white/80'
               )}
             />
           ))}
@@ -156,7 +156,7 @@ function WhoWeAreContent({
                   description={item.description ?? ''}
                   background={item.background}
                   className={cn(
-                    'min-h-[10.5rem] w-full border border-white/15 bg-white/5 text-white dark:border-white/20 dark:bg-white/10 md:min-h-[12rem] md:w-[calc((100%-3rem)/3)] [&_h3]:text-white [&_p]:text-white/80'
+                    'min-h-[10.5rem] w-full border border-white/15 bg-white/5 text-white dark:border-white/20 dark:bg-white/10 md:min-h-[18rem] md:w-[calc((100%-3rem)/3)] [&_h3]:text-white [&_p]:text-white/80'
                   )}
                 />
               ))}

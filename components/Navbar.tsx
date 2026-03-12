@@ -10,10 +10,10 @@ import { Menu, X } from 'lucide-react'
 /** Nav link label and href */
 const NAV_LINKS: { label: string; href: string }[] = [
   { label: 'Home', href: '/' },
+  { label: 'Opportunities', href: '/#mission' },
   { label: 'Events', href: '/#events' },
-  { label: 'Projects', href: '/#projects' },
   { label: 'Members', href: '/members' },
-  { label: 'Opportunities', href: '/#opportunities' },
+  
   { label: 'Wall of Love', href: '/#wall-of-love' },
   { label: 'FAQ', href: '/#faq' },
 ]

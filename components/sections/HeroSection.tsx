@@ -91,9 +91,19 @@ export function HeroSection({ data }: HeroSectionProps) {
             href={primaryLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-9 items-center justify-center rounded-full border border-primary/40 bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-inner shadow-[0_0_25px_rgba(153,69,255,0.45)] transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="group/cta inline-flex h-12 min-w-[11rem] items-center justify-end gap-3 rounded-full border border-primary/40 bg-primary py-3 pl-8 pr-6 text-base font-semibold text-primary-foreground shadow-inner shadow-[0_0_25px_rgba(153,69,255,0.45)] transition-[min-width,padding,background-color] duration-300 ease-out hover:min-w-[14rem] hover:bg-primary/90 hover:pl-10 hover:pr-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            {primaryLabel}
+            <span>{primaryLabel}</span>
+            {/* Up-right arrow, visible on hover with smooth fade-in */}
+            <span
+              className="flex h-5 w-5 flex-shrink-0 opacity-0 transition-opacity duration-300 ease-out group-hover/cta:opacity-100"
+              aria-hidden
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7 17L17 7" />
+                <path d="M7 7h10v10" />
+              </svg>
+            </span>
           </Link>
           <Link
             href={secondaryLink}

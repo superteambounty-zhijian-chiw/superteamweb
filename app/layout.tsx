@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Roboto, DM_Sans } from "next/font/google";
+import { Navbar } from "@/components/Navbar";
 import "./globals.css";
 
 /** Body / sans font — Roboto */
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} ${dmSans.variable} font-sans antialiased`}
       >
+        <Navbar />
         {children}
       </body>
     </html>

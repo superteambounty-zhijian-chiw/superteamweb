@@ -48,7 +48,7 @@ export function HeroSection({ data }: HeroSectionProps) {
 
   return (
     <section
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 py-16 sm:px-6 sm:py-20 md:py-24"
+      className="relative flex min-h-screen flex-col justify-end overflow-hidden px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-24 md:pb-24 md:pt-28"
       aria-labelledby="hero-heading"
     >
       {/* Background hero video from public assets */}
@@ -73,17 +73,20 @@ export function HeroSection({ data }: HeroSectionProps) {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto max-w-3xl text-center">
-        <h1
-          id="hero-heading"
-          className="font-heading text-balance text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl md:tracking-[-0.04em]"
-        >
-          {headline}
-        </h1>
-        <p className="mt-5 text-base leading-relaxed text-[#D0D4E0] sm:text-lg">
-          {subheadline}
-        </p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+      {/* Bottom row: headline/subheadline left, CTAs right */}
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <div className="max-w-xl">
+          <h1
+            id="hero-heading"
+            className="font-heading text-balance text-left text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl md:tracking-[-0.04em]"
+          >
+            {headline}
+          </h1>
+          <p className="mt-5 text-left text-base leading-relaxed text-[#D0D4E0] sm:text-lg">
+            {subheadline}
+          </p>
+        </div>
+        <div className="flex flex-shrink-0 flex-wrap items-center justify-end gap-4 sm:justify-end">
           <Link
             href={primaryLink}
             target="_blank"

@@ -14,6 +14,7 @@ interface HeroSectionProps {
     | 'heroPrimaryCtaLink'
     | 'heroSecondaryCtaLabel'
     | 'heroSecondaryCtaLink'
+    | 'heroBackgroundUrl'
   > | null
 }
 
@@ -53,23 +54,34 @@ export function HeroSection({ data }: HeroSectionProps) {
   const secondaryLabel = data?.heroSecondaryCtaLabel ?? 'Explore Opportunities'
   const secondaryLink = data?.heroSecondaryCtaLink ?? '#'
 
+  const heroBackgroundUrl = data?.heroBackgroundUrl ?? '/assets/Abstract_Solana_Energy_in_Kuala_Lumpur.mp4'
+  const isHeroBackgroundVideo = /\.(mp4|webm)(\?.*)?$/i.test(heroBackgroundUrl)
+
   return (
     <section
       ref={sectionRef}
       className="relative flex min-h-screen flex-col justify-end overflow-hidden px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-24 md:pb-24 md:pt-28"
       aria-labelledby="hero-heading"
     >
-      {/* Background hero video from public assets */}
-      <video
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-hidden="true"
-      >
-        <source src="/assets/Abstract_Solana_Energy_in_Kuala_Lumpur.mp4" type="video/mp4" />
-      </video>
+      {/* Background hero media from Sanity (fallbacks to public asset) */}
+      {isHeroBackgroundVideo ? (
+        <video
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden="true"
+        >
+          <source src={heroBackgroundUrl} type="video/mp4" />
+        </video>
+      ) : (
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroBackgroundUrl})` }}
+          aria-hidden="true"
+        />
+      )}
       {/* Dark gradient overlay from bottom to top to keep text readable on top of bright video */}
       <div
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"

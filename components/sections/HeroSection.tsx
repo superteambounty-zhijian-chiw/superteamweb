@@ -1,4 +1,8 @@
+'use client'
+
 import Link from 'next/link'
+import { useRef } from 'react'
+import { motion, useInView } from 'motion/react'
 import type { LandingContent } from '@/types/database'
 
 interface HeroSectionProps {
@@ -37,6 +41,9 @@ interface HeroSectionProps {
  * Uses fallback copy when Sanity content is missing.
  */
 export function HeroSection({ data }: HeroSectionProps) {
+  const sectionRef = useRef<HTMLElement>(null)
+  const isInView = useInView(sectionRef, { once: true, amount: 0.15 })
+
   const headline = data?.heroHeadline ?? 'Build on Solana in Malaysia'
   const subheadline =
     data?.heroSubheadline ??
@@ -48,6 +55,7 @@ export function HeroSection({ data }: HeroSectionProps) {
 
   return (
     <section
+      ref={sectionRef}
       className="relative flex min-h-screen flex-col justify-end overflow-hidden px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-24 md:pb-24 md:pt-28"
       aria-labelledby="hero-heading"
     >
@@ -73,8 +81,13 @@ export function HeroSection({ data }: HeroSectionProps) {
         aria-hidden="true"
       />
 
-      {/* Bottom row: headline/subheadline left, CTAs right */}
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      {/* Bottom row: headline/subheadline left, CTAs right — fades up when section enters view */}
+      <motion.div
+        className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-6 sm:flex-row sm:items-end sm:justify-between"
+        initial={{ opacity: 0, y: 28 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
         <div className="max-w-xl">
           <h1
             id="hero-heading"
@@ -117,7 +130,7 @@ export function HeroSection({ data }: HeroSectionProps) {
             </span>
           </Link>
         </div>
-      </div>
+      </motion.div>
     </section>
   )
 }

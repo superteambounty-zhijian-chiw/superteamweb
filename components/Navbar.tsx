@@ -20,8 +20,8 @@ const NAV_LINKS: { label: string; href: string }[] = [
 
 /** Social icon config: image from frontend public assets, alt and URL */
 const SOCIAL_LINKS: { src: string; alt: string; href: string }[] = [
-  { src: '/assets/twitter.png', alt: 'Twitter / X', href: 'https://twitter.com' },
-  { src: '/assets/telegram.png', alt: 'Telegram', href: 'https://t.me' },
+  { src: '/assets/twitter.png', alt: 'Twitter / X', href: 'https://x.com/SuperteamMY' },
+  { src: '/assets/telegram.png', alt: 'Telegram', href: 'https://t.me/SuperteamMY' },
 ]
 
 const LOGO_SRC = '/assets/superteamMY_logo_transparent.png'

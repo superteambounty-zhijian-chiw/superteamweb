@@ -70,14 +70,29 @@ export function EventSection({
           </p>
         </header>
 
-        {/* Past events: single hero slide (image left, content right) + auto slider with dots */}
+        {/* Past events: sliding hero (slide left for next) + dot slider below */}
         {pastEvents.length > 0 && (
           <div className="mb-14">
-            <PastEventHero
-              event={pastEvents[pastSlideIndex]!}
-              slideIndex={pastSlideIndex}
-              totalSlides={totalPast}
-            />
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-500 ease-out"
+                style={{
+                  width: `${totalPast * 100}%`,
+                  transform: `translateX(${-(pastSlideIndex * 100) / totalPast}%)`,
+                }}
+              >
+                {pastEvents.map((event, i) => (
+                  <div key={event.id} className="flex-shrink-0" style={{ width: `${100 / totalPast}%` }}>
+                    <PastEventHero
+                      event={event}
+                      slideIndex={i}
+                      totalSlides={totalPast}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Dot slider below past event highlight */}
             {totalPast > 1 && (
               <div className="mt-4 flex justify-center gap-2" role="tablist" aria-label="Past event slides">
                 {pastEvents.map((_, i) => (
@@ -89,8 +104,10 @@ export function EventSection({
                     aria-label={`Go to past event ${i + 1}`}
                     onClick={() => setPastSlideIndex(i)}
                     className={cn(
-                      'h-2 w-2 rounded-full transition-colors',
-                      i === pastSlideIndex ? 'bg-primary' : 'bg-muted-foreground/40 hover:bg-muted-foreground/60'
+                      'h-2.5 w-2.5 rounded-full transition-colors duration-300',
+                      i === pastSlideIndex
+                        ? 'bg-[#8b9dfc]'
+                        : 'bg-white/30 hover:bg-white/50 dark:bg-white/20 dark:hover:bg-white/40'
                     )}
                   />
                 ))}

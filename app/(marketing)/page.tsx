@@ -15,7 +15,7 @@ import WelcomeSection from '@/components/sections/welcome'
  * Landing page: all section content is loaded directly from Sanity via getLandingPageDataFromSanity().
  */
 export default async function LandingPage() {
-  const { landing, partners, members, faq, pastEvents } =
+  const { landing, partners, members, faq } =
     await getLandingPageDataFromSanity()
 
   return (
@@ -47,7 +47,6 @@ export default async function LandingPage() {
         <StatsSection stats={landing?.stats ?? null} />
 
         <EventSection
-          pastEvents={pastEvents}
           viewAllEventsUrl={landing?.viewAllEventsUrl ?? null}
         />
 

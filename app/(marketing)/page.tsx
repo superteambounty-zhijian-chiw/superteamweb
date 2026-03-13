@@ -15,7 +15,7 @@ import WelcomeSection from '@/components/sections/welcome'
  * Landing page: all section content is loaded directly from Sanity via getLandingPageDataFromSanity().
  */
 export default async function LandingPage() {
-  const { landing, partners, members, faq, pastEvents, upcomingEvents } =
+  const { landing, partners, members, faq, pastEvents } =
     await getLandingPageDataFromSanity()
 
   return (
@@ -28,7 +28,7 @@ export default async function LandingPage() {
           .mosque-bg {
             background-image: url('/assets/kl_mosque.jpg');
           }
-          @media (max-width: 1024px) {
+          @media (max-width: 1500px) {
             .mosque-bg {
               background-image: url('/assets/kl_mosque_tablet_view.jpg');
             }
@@ -48,7 +48,6 @@ export default async function LandingPage() {
 
         <EventSection
           pastEvents={pastEvents}
-          upcomingEvents={upcomingEvents}
           viewAllEventsUrl={landing?.viewAllEventsUrl ?? null}
         />
 

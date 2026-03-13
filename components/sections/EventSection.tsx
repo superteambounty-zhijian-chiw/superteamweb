@@ -9,12 +9,18 @@ import { cn } from '@/lib/utils'
 /** Fallback Luma URL when CMS view_all_events_url is not set (Superteam Malaysia) */
 const DEFAULT_LUMA_URL = 'https://lu.ma/mysuperteam'
 
+/**
+ * Luma calendar embed ID — get this from your Luma dashboard:
+ * Calendars → select calendar → Settings → Embed → copy the cal-xxx ID.
+ * Example: 'cal-Gzr5sGdPCbqqfyA'
+ */
+const LUMA_CALENDAR_EMBED_ID = 'cal-Gzr5sGdPCbqqfyA'
+
 /** Interval in ms for auto-advancing the past events slider */
 const PAST_EVENT_SLIDER_INTERVAL_MS = 5000
 
 interface EventSectionProps {
   pastEvents: EventView[]
-  upcomingEvents: EventView[]
   viewAllEventsUrl: string | null
 }
 
@@ -25,7 +31,6 @@ interface EventSectionProps {
  */
 export function EventSection({
   pastEvents,
-  upcomingEvents,
   viewAllEventsUrl,
 }: EventSectionProps) {
   const lumaUrl = viewAllEventsUrl ?? DEFAULT_LUMA_URL
@@ -54,7 +59,7 @@ export function EventSection({
       />
       {/* Horizontal oval gradient: darker outer, transparent inner */}
       <div
-        className="absolute inset-0 z-[1]"
+        className="absolute inset-0 z-1"
         style={{
           background: 'radial-gradient(ellipse 100% 40% at 50% 50%, transparent 0%, transparent 25%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0.75) 100%)',
         }}
@@ -63,16 +68,27 @@ export function EventSection({
       <div className="relative z-10 mx-auto max-w-6xl">
         <header className="mb-10">
           <h2 id="events-heading" className="font-heading text-3xl font-bold text-foreground sm:text-4xl text-center">
-          Where Builders Meet
+            Where Builders Meet
           </h2>
           <p className="mt-2 text-muted-foreground text-center">
             Join Superteam Malaysia events on Luma — meetups, workshops, and community gatherings.
           </p>
         </header>
 
+        {/* Upcoming events — Luma embedded calendar widget */}
+        <div className="mb-14">
+          <h3 className="mb-6 font-heading text-xl font-semibold text-foreground">
+            Upcoming
+          </h3>
+          <LumaCalendarEmbed calendarId={LUMA_CALENDAR_EMBED_ID} />
+        </div>
+
         {/* Past events: sliding hero (slide left for next) + dot slider below */}
         {pastEvents.length > 0 && (
-          <div className="mb-14">
+          <div className="mb-10">
+            <h3 className="mb-6 font-heading text-xl font-semibold text-foreground">
+              Past Highlights
+            </h3>
             <div className="overflow-hidden">
               <div
                 className="flex transition-transform duration-500 ease-out"
@@ -82,7 +98,7 @@ export function EventSection({
                 }}
               >
                 {pastEvents.map((event, i) => (
-                  <div key={event.id} className="flex-shrink-0" style={{ width: `${100 / totalPast}%` }}>
+                  <div key={event.id} className="shrink-0" style={{ width: `${100 / totalPast}%` }}>
                     <PastEventHero
                       event={event}
                       slideIndex={i}
@@ -113,20 +129,6 @@ export function EventSection({
                 ))}
               </div>
             )}
-          </div>
-        )}
-
-        {/* Upcoming events — glassmorphism containers, no countdown */}
-        {upcomingEvents.length > 0 && (
-          <div className="mb-10">
-            <h3 className="mb-6 font-heading text-xl font-semibold text-foreground">
-              Upcoming
-            </h3>
-            <ul className="space-y-4">
-              {upcomingEvents.map((event) => (
-                <UpcomingEventRow key={event.id} event={event} />
-              ))}
-            </ul>
           </div>
         )}
 
@@ -192,7 +194,7 @@ function PastEventHero({
       {/* Right: title + description — full Glassmorphism, gradient border (transparent at outer edges) */}
       <div className="relative flex flex-1 overflow-hidden">
         <div
-          className="pointer-events-none absolute inset-0 backdrop-blur-md bg-white/[0.01] dark:bg-white/[0.06] rounded-xl"
+          className="pointer-events-none absolute inset-0 backdrop-blur-md bg-white/1 dark:bg-white/6 rounded-xl"
           aria-hidden
         />
         {/* Gradient border: transparent at outer edges, visible toward center */}
@@ -203,7 +205,7 @@ function PastEventHero({
           }}
           aria-hidden
         />
-        <div className="relative z-10 flex flex-col justify-center py-6 pl-0 sm:py-8 sm:pl-10">
+        <div className="relative z-10 flex flex-col items-center justify-center text-center py-6 pl-0 sm:items-start sm:py-8 sm:pl-10 sm:text-left">
           <h3 className="font-heading text-xl font-semibold text-foreground sm:text-2xl">{title}</h3>
           <p className="mt-1 text-sm text-black">
             {dateStr}
@@ -229,52 +231,39 @@ function PastEventHero({
 }
 
 /**
- * Single upcoming event row: not a card. White-grey divider on top; glassmorphism
- * background with gradient (transparent at left/right, glass toward center); no rounded corners.
+ * Luma embedded calendar widget.
+ * Renders an iframe pointing to lu.ma/embed/calendar/{calendarId}/events.
+ * The calendarId should be the `cal-xxx` ID from your Luma dashboard:
+ * Calendars → select calendar → Settings → Embed.
  */
-function UpcomingEventRow({ event }: { event: EventView }) {
-  const title = event.name ?? 'Event'
-  const dateStr = event.startAt
-    ? formatEventDateRange(event.startAt, event.endAt, event.timezone ?? undefined)
-    : ''
-  const location = event.geoAddress ?? 'Online'
-  const subtitle = [dateStr, location].filter(Boolean).join(' · ') || 'Date · Time · Place'
-  const registerUrl = event.url ?? null
-
+function LumaCalendarEmbed({ calendarId }: { calendarId: string }) {
   return (
-    <li className="relative overflow-hidden">
-      {/* White-grey divider on top of each upcoming event */}
-      <div className="border-t border-white/20 dark:border-white/20" aria-hidden />
-      {/* Glassmorphism: transparent at left/right, glass toward center; no rounded corners */}
-      <div className="relative flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-        {/* Gradient glass overlay: transparent edges -> glass center */}
-        <div
-          className="pointer-events-none absolute inset-0 backdrop-blur-md bg-white/[0.06] dark:bg-white/[0.06]"
-          style={{
-            maskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
-            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)',
-          }}
-          aria-hidden
-        />
-        <div className="relative z-10 min-w-0 flex-1">
-          <h4 className="font-medium text-foreground">{title}</h4>
-          <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>
-        </div>
-        {registerUrl && (
-          <Link
-            href={registerUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              'relative z-10 shrink-0 inline-flex items-center gap-1.5 rounded-full border border-border bg-background/80 px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-            )}
-          >
-            Register
-            <span aria-hidden>→</span>
-          </Link>
-        )}
-      </div>
-    </li>
+    <div
+      className="relative overflow-hidden rounded-xl"
+      style={{
+        /* Subtle glassmorphism wrapper to blend with the section */
+        background: 'rgba(255,255,255,0.04)',
+        backdropFilter: 'blur(8px)',
+        border: '1px solid rgba(255,255,255,0.12)',
+        boxShadow: '0 4px 32px rgba(0,0,0,0.25)',
+      }}
+    >
+      <iframe
+        src={`https://lu.ma/embed/calendar/${calendarId}/events`}
+        width="100%"
+        height="450"
+        frameBorder="0"
+        style={{
+          display: 'block',
+          borderRadius: '0.75rem',
+          colorScheme: 'dark',
+        }}
+        allowFullScreen
+        aria-hidden={false}
+        tabIndex={0}
+        title="Superteam Malaysia upcoming events"
+      />
+    </div>
   )
 }
 

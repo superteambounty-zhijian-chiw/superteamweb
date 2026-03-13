@@ -26,9 +26,9 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
         >
           Powered by Leading Web3 Partners
         </h2>
-        
+
         {hasPartners ? (
-          <div className="mt-8 grid grid-cols-2 items-center justify-items-center gap-x-6 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-x-8 sm:gap-y-8">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-8 sm:gap-x-10 sm:gap-y-10">
             {partners!.map((partner) => {
               const logoUrl = partner.logoUrl ?? null
               const content = (
@@ -54,12 +54,12 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
                   href={partner.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="basis-1/3 sm:basis-auto flex justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
                   {content}
                 </Link>
               ) : (
-                <span key={partner.id}>{content}</span>
+                <span key={partner.id} className="basis-1/3 sm:basis-auto flex justify-center">{content}</span>
               )
             })}
           </div>

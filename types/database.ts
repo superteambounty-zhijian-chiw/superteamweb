@@ -65,6 +65,9 @@ export interface EventRow {
   url: string | null
   cover_url: string | null
   geo_address: string | null
+  location: string | null
+  highlight: boolean | null
+  order: number | null
   created_at: string | null
   updated_at: string | null
   sanity_id?: string | null

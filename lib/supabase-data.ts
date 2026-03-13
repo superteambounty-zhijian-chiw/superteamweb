@@ -9,6 +9,7 @@ import type {
   PartnerRow,
   FaqItemRow,
   EventRow,
+  TestimonialRow,
   LandingContent,
   MemberView,
   PartnerView,
@@ -38,40 +39,40 @@ export async function getLandingContent(): Promise<LandingContent | null> {
   const missionPillars =
     pillarsRes.data && !pillarsRes.error
       ? (pillarsRes.data as MissionPillarRow[]).map((p) => ({
-          title: p.title ?? undefined,
-          description: p.description ?? undefined,
-        }))
+        title: p.title ?? undefined,
+        description: p.description ?? undefined,
+      }))
       : []
 
   const statsRow = statsRes.data as LandingStatsRow | null
   const stats =
     !statsRes.error && statsRow
       ? {
-          members: statsRow.members ?? 0,
-          events: statsRow.events ?? 0,
-          projects: statsRow.projects ?? 0,
-          bounties: statsRow.bounties ?? 0,
-          reach: statsRow.reach ?? 0,
-        }
+        members: statsRow.members ?? 0,
+        events: statsRow.events ?? 0,
+        projects: statsRow.projects ?? 0,
+        bounties: statsRow.bounties ?? 0,
+        reach: statsRow.reach ?? 0,
+      }
       : null
 
   const footerLinks =
     footerRes.data && !footerRes.error
       ? (footerRes.data as FooterLinkRow[]).map((f) => ({
-          label: f.label ?? undefined,
-          url: f.url ?? undefined,
-        }))
+        label: f.label ?? undefined,
+        url: f.url ?? undefined,
+      }))
       : []
 
   const socialRow = socialRes.data as SocialLinksRow | null
   const socialLinks =
     !socialRes.error && socialRow
       ? {
-          twitter: socialRow.twitter_url ?? undefined,
-          discord: socialRow.discord_url ?? undefined,
-          telegram: socialRow.telegram_url ?? undefined,
-          superteamGlobal: socialRow.superteam_global_url ?? undefined,
-        }
+        twitter: socialRow.twitter_url ?? undefined,
+        discord: socialRow.discord_url ?? undefined,
+        telegram: socialRow.telegram_url ?? undefined,
+        superteamGlobal: socialRow.superteam_global_url ?? undefined,
+      }
       : null
 
   return {
@@ -149,16 +150,30 @@ export async function getLandingPageData(): Promise<{
   faq: FaqItemView[]
   pastEvents: EventView[]
   upcomingEvents: EventView[]
+  testimonials: string[]
 }> {
-  const [landing, partners, members, faq, pastEvents, upcomingEvents] = await Promise.all([
+  const [landing, partners, members, faq, pastEvents, upcomingEvents, testimonials] = await Promise.all([
     getLandingContent(),
     getPartners(),
     getMembers(),
     getFaqItems(),
     getHighlightedPastEvents(),
     getUpcomingEvents(),
+    getTestimonials(),
   ])
-  return { landing, partners, members, faq, pastEvents, upcomingEvents }
+  return { landing, partners, members, faq, pastEvents, upcomingEvents, testimonials }
+}
+
+/** Fetch all testimonial tweet IDs from Supabase */
+export async function getTestimonials(): Promise<string[]> {
+  const { data, error } = await supabase
+    .from('testimonials')
+    .select('tweet_id')
+    .eq('is_published', true)
+    .order('order', { ascending: true, nullsFirst: false })
+
+  if (error || !data) return []
+  return (data as TestimonialRow[]).map((r) => r.tweet_id).filter((id): id is string => Boolean(id))
 }
 
 /** Fetch all partners, ordered */

@@ -3,6 +3,7 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { urlFor } from '@/lib/sanity.image'
 import type {
   LandingPage as SanityLandingPage,
+  Hero as SanityHero,
   SanityStats,
   Member as SanityMember,
   Partner as SanityPartner,
@@ -126,6 +127,11 @@ export async function POST(request: NextRequest) {
           await syncLandingPage(admin, id, doc as SanityLandingPage)
         }
         break
+      case 'hero':
+        if (!deleteLike) {
+          await syncHero(admin, id, doc as SanityHero)
+        }
+        break
       case 'stats':
         if (!deleteLike) {
           await syncStats(admin, doc as SanityStats)
@@ -176,6 +182,7 @@ async function syncLandingPage(
     hero_secondary_cta_label: doc.heroSecondaryCtaLabel ?? null,
     hero_secondary_cta_link: doc.heroSecondaryCtaLink ?? null,
     view_all_events_url: doc.viewAllEventsUrl ?? null,
+    hero_background_url: (doc as SanityLandingPage & { heroBackgroundUrl?: string }).heroBackgroundUrl ?? null,
   }
 
   const { error: heroError } = await admin.from('landing_page').upsert(heroUpsert)
@@ -240,6 +247,30 @@ async function syncLandingPage(
 
   const { error: socialError } = await admin.from('social_links').upsert(socialUpsert)
   if (socialError) throw socialError
+}
+
+/**
+ * Syncs the dedicated hero document to Supabase landing_page (singleton row).
+ */
+async function syncHero(
+  admin: SupabaseClient,
+  sanityId: string,
+  doc: SanityHero,
+): Promise<void> {
+  const heroUpsert = {
+    id: 'default',
+    sanity_id: sanityId,
+    hero_headline: doc.heroHeadline ?? null,
+    hero_subheadline: doc.heroSubheadline ?? null,
+    hero_primary_cta_label: doc.heroPrimaryCtaLabel ?? null,
+    hero_primary_cta_link: doc.heroPrimaryCtaLink ?? null,
+    hero_secondary_cta_label: doc.heroSecondaryCtaLabel ?? null,
+    hero_secondary_cta_link: doc.heroSecondaryCtaLink ?? null,
+    hero_background_url: doc.heroBackgroundUrl ?? null,
+  }
+
+  const { error } = await admin.from('landing_page').upsert(heroUpsert)
+  if (error) throw error
 }
 
 /**
@@ -408,6 +439,7 @@ async function syncEvent(
     geo_address: doc.geoAddress ?? null,
     location: doc.location ?? null,
     highlight: doc.highlight ?? false,
+    order: doc.order ?? 0,
     is_published: true,
   }
 

@@ -59,6 +59,7 @@ export function HeroSection({ data }: HeroSectionProps) {
 
   return (
     <section
+      id="hero"
       ref={sectionRef}
       className="relative flex min-h-screen flex-col justify-end overflow-hidden px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-24 md:pb-24 md:pt-28"
       aria-labelledby="hero-heading"

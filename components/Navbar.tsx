@@ -9,7 +9,7 @@ import { Menu, X } from 'lucide-react'
 
 /** Nav link label and href */
 const NAV_LINKS: { label: string; href: string }[] = [
-  { label: 'Home', href: '/' },
+  { label: 'Home', href: '/#hero' },
   { label: 'Events', href: '/#events' },
   { label: 'Members', href: '/members' },
 

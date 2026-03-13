@@ -10,6 +10,7 @@ import type {
   FaqItem as SanityFaqItem,
   Testimonial as SanityTestimonial,
   Event as SanityEvent,
+  SocialLink as SanitySocialLink,
   SanityImage,
 } from '@/types/sanity'
 
@@ -151,6 +152,11 @@ export async function POST(request: NextRequest) {
         break
       case 'event':
         await syncEvent(admin, id, doc as SanityEvent, deleteLike)
+        break
+      case 'socialLink':
+        if (!deleteLike) {
+          await syncSocialLink(admin, doc as SanitySocialLink)
+        }
         break
       default:
         // Ignore unknown document types so hooks can be broader without failing.
@@ -444,6 +450,18 @@ async function syncEvent(
   }
 
   const { error } = await admin.from('events').upsert(upsert, { onConflict: 'sanity_id' })
+  if (error) throw error
+}
+
+async function syncSocialLink(admin: SupabaseClient, doc: SanitySocialLink): Promise<void> {
+  const upsert = {
+    id: 'default',
+    twitter_url: doc.twitter_url ?? null,
+    discord_url: doc.discord_url ?? null,
+    telegram_url: doc.telegram_url ?? null,
+    superteam_global_url: doc.superteam_global_url ?? null,
+  }
+  const { error } = await admin.from('social_links').upsert(upsert)
   if (error) throw error
 }
 

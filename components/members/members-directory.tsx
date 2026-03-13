@@ -22,19 +22,7 @@ interface MembersDirectoryProps {
   members: MemberCardData[]
 }
 
-/** All supported skill filters shown as pills and in the dropdown. */
-const SKILL_FILTERS = [
-  "Core Team",
-  "Rust",
-  "Frontend",
-  "Design",
-  "Content",
-  "Growth",
-  "Product",
-  "Community",
-] as const
-
-type SkillFilter = (typeof SKILL_FILTERS)[number] | "All"
+type SkillFilter = string | "All"
 
 /** Build a stable subtitle string combining title and company for the card footer. */
 function getMemberSubtitle(title?: string | null, company?: string | null) {
@@ -119,6 +107,12 @@ export function MembersDirectory({ members }: MembersDirectoryProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [skillFilter, setSkillFilter] = useState<SkillFilter>("All")
   const containerRef = useRef<HTMLDivElement | null>(null)
+
+  const skillFilters = useMemo(() => {
+    const allTags = members.flatMap((m) => m.skillTags ?? [])
+    const uniqueTags = Array.from(new Set(allTags.map((t) => t.trim()))).filter(Boolean)
+    return uniqueTags.sort()
+  }, [members])
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -218,7 +212,7 @@ export function MembersDirectory({ members }: MembersDirectoryProps) {
                   <option value="All" style={{ backgroundColor: "#020617", color: "#ffffff" }}>
                     All
                   </option>
-                  {SKILL_FILTERS.map((filter) => (
+                  {skillFilters.map((filter) => (
                     <option
                       key={filter}
                       value={filter}
@@ -242,13 +236,13 @@ export function MembersDirectory({ members }: MembersDirectoryProps) {
         </header>
 
         <div className="flex flex-wrap gap-2">
-          {SKILL_FILTERS.map((filter) => {
+          {skillFilters.map((filter) => {
             const isActive = skillFilter === filter
             return (
               <button
                 key={filter}
                 type="button"
-                onClick={() => setSkillFilter(isActive ? "All" as SkillFilter : filter)}
+                onClick={() => setSkillFilter(isActive ? "All" : filter)}
                 className={cn(
                   "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                   isActive

@@ -24,10 +24,22 @@ export default async function LandingPage() {
       {/* Stacks above fixed hero; no bg here so hero stays visible during scroll transition */}
       <div className="relative z-10">
         {/* Single continuous background for Welcome + Partners */}
-        <div
-          className="relative bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/assets/kl_mosque.jpg')" }}
-        >
+        <style>{`
+          .mosque-bg {
+            background-image: url('/assets/kl_mosque.jpg');
+          }
+          @media (max-width: 1024px) {
+            .mosque-bg {
+              background-image: url('/assets/kl_mosque_tablet_view.jpg');
+            }
+          }
+          @media (max-width: 640px) {
+            .mosque-bg {
+              background-image: url('/assets/kl_mosque_mobile.jpg');
+            }
+          }
+        `}</style>
+        <div className="mosque-bg relative bg-cover bg-center bg-no-repeat">
           <WelcomeSection />
           <PartnersSection partners={partners} />
         </div>
@@ -39,7 +51,7 @@ export default async function LandingPage() {
           upcomingEvents={upcomingEvents}
           viewAllEventsUrl={landing?.viewAllEventsUrl ?? null}
         />
-        
+
         <MemberSection members={members} />
         <CommunitySection />
         {/* Single continuous background for FAQ, CTA, and Footer */}

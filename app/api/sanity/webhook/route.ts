@@ -456,10 +456,10 @@ async function syncEvent(
 async function syncSocialLink(admin: SupabaseClient, doc: SanitySocialLink): Promise<void> {
   const upsert = {
     id: 'default',
-    twitter_url: doc.twitter_url ?? null,
-    discord_url: doc.discord_url ?? null,
-    telegram_url: doc.telegram_url ?? null,
-    superteam_global_url: doc.superteam_global_url ?? null,
+    twitter_url: doc.twitterUrl ?? null,
+    discord_url: doc.discordUrl ?? null,
+    telegram_url: doc.telegramUrl ?? null,
+    superteam_global_url: doc.superteamGlobalUrl ?? null,
   }
   const { error } = await admin.from('social_links').upsert(upsert)
   if (error) throw error

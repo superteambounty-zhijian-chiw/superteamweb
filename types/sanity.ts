@@ -118,8 +118,8 @@ export interface Event {
 export interface SocialLink {
   _id: string
   _type: 'socialLink'
-  twitter_url?: string
-  discord_url?: string
-  telegram_url?: string
-  superteam_global_url?: string
+  twitterUrl?: string
+  discordUrl?: string
+  telegramUrl?: string
+  superteamGlobalUrl?: string
 }

@@ -57,7 +57,7 @@ export const CommunitySection = async () => {
     const columns4 = splitTweetIdsIntoColumns(validTweetIds, 4)
 
     return (
-        <section className="relative mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-8 overflow-hidden px-4 py-16 md:px-8">
+        <section id="community" className="relative mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-8 overflow-hidden px-4 py-16 md:px-8">
             <DotPattern
                 width={24}
                 height={24}

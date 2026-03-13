@@ -13,7 +13,7 @@ const NAV_LINKS: { label: string; href: string }[] = [
   { label: 'Events', href: '/#events' },
   { label: 'Members', href: '/members' },
 
-  { label: 'Wall of Love', href: '/#wall-of-love' },
+  { label: 'Wall of Love', href: '/#community' },
   { label: 'FAQ', href: '/#faq' },
 ]
 
